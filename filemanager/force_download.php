@@ -1,25 +1,45 @@
 <?php
+
+use Illuminate\Http;
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
 $config = include 'config/config.php';
 //TODO switch to array
 extract($config, EXTR_OVERWRITE);
+
+$request = Http\Request::createFromGlobals();
+
 if($_SESSION['RF']["verify"] != "RESPONSIVEfilemanager") die('forbiden');
+
 include 'include/utils.php';
 include 'include/mime_type_lib.php';
 
-if(strpos($_POST['path'],'/')===0
-    || strpos($_POST['path'],'../')!==FALSE
-    || strpos($_POST['path'],'./')===0)
-    die('wrong path');
+$path = $request->get('path', null);
+$name = $request->get('name', null);
 
-if(strpos($_POST['name'],'/')!==FALSE)
-    die('wrong path');
+if (
+	!$path || !$name
+	|| strpos($path,'/') === 0
+    || strpos($path,'../') !== false
+    || strpos($path,'./') === 0
+	|| strpos($name,'/') !== false
+)
+{
+	$r = new Http\Response('Wrong path', Http\Response::HTTP_BAD_REQUEST);
+	$r->send();
+	exit;
+}
 
-$path=$current_path.$_POST['path'];
-$name=$_POST['name'];
+$path = $current_path . $path;
 
-$info=pathinfo($name);
-if(!in_array(fix_strtolower($info['extension']), $ext)){
-    die('wrong extension');
+$info = pathinfo($name);
+
+if (!in_array(fix_strtolower($info['extension']), $ext))
+{
+	$r = new Http\Response('Wrong extension', Http\Response::HTTP_BAD_REQUEST);
+	$r->send();
+	exit;
 }
 
 $img_size = (string)(filesize($path.$name)); // Get the image size as string
