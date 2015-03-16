@@ -3,6 +3,37 @@ session_start();
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Rome');
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+/**
+ * Determine if SSL is used.
+ *
+ * @since 2.6.0
+ *
+ * @return bool True if SSL, false if not used.
+ */
+function is_ssl()
+{
+	if (isset($_SERVER['HTTPS']))
+	{
+		if ('on' == strtolower($_SERVER['HTTPS']))
+		{
+			return true;
+		}
+		if ('1' == $_SERVER['HTTPS'])
+		{
+			return true;
+		}
+	}
+	elseif (isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT']))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 /*
 |--------------------------------------------------------------------------
 | Optional security
@@ -56,7 +87,7 @@ $config = array(
 	|
 	*/
 
-	'base_url' => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && ! in_array(strtolower($_SERVER['HTTPS']), array( 'off', 'no' ))) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'],
+	'base_url' => (is_ssl() ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -77,6 +108,16 @@ $config = array(
 	|
 	*/
 	'current_path' => '../source/',
+
+	/*
+	|--------------------------------------------------------------------------
+	| thumbs type
+	|--------------------------------------------------------------------------
+	|
+	| Default: local
+	|
+	*/
+	'thumbs_type' => 'local',
 
 	/*
 	|--------------------------------------------------------------------------

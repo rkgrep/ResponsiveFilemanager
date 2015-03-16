@@ -7,5 +7,14 @@
       "name": "Alberto Peripolli",
       "email": "info@albertoperipolli.com"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "trippo\\": "filemanager"
+    }
+  },
+  "require": {
+    "illuminate/http": "~5.0",
+    "illuminate/filesystem": "~5.0"
+  }
 }
