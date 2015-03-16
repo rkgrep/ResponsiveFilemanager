@@ -1,0 +1,11 @@
+{
+  "name": "trippo/responsive-filemanager",
+  "minimum-stability": "stable",
+  "license": "Creative Commons Attribution - NonCommercial 3.0 Unported License",
+  "authors": [
+    {
+      "name": "Alberto Peripolli",
+      "email": "info@albertoperipolli.com"
+    }
+  ]
+}
