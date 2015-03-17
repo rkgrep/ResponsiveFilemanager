@@ -198,6 +198,12 @@ $config = array(
 	//******************
 	'default_view'                            => 0,
 
+	'default_sort_by'                         => 'name',
+
+	'default_order'                           => 'desc',
+
+	'default_filter'                          => '',
+
 	//set if the filename is truncated when overflow first row
 	'ellipsis_title_after_first_row'          => true,
 
